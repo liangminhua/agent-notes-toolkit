@@ -32,8 +32,6 @@
     "micromark-extension-gfm": "^3.0.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-commands": "^0.0.1-rc.1",
-    "@deepseek-ai/dsh-tools": "^0.0.1-rc.1"
+    "@deepseek-ai/cordis": "^4.0.2"
   }
 }

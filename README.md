@@ -1,47 +1,49 @@
 # Agent Notes Toolkit (AN)
 
-Agent Notes 机制的可移植工具包:决策记录树、校验门禁、脚手架 CLI、维护技能,以及 dsh 的 AN 模式 preset。
+English | [中文](README.zh.md)
 
-## 安装
+The portable Agent Notes mechanism: a decision-record tree, verification gates, a scaffolding CLI, maintenance skills, and the AN preset for dsh.
+
+## Install
 
 ```sh
 npm install --save-dev @liangminhua/agent-notes-toolkit
 ```
 
-## 使用
+## Use
 
 ```sh
-npx an init          # 生成 .agents/notes 骨架 + 种子 note + 版本钉扎
-npx an verify        # 跑全部 gates;违规时退出码 1,每行一条违规
-npx an ci-setup      # 探测 CI 供应商,写独立 workflow 文件(不覆盖现有配置)
-npx an migrate       # 骨架随工具包版本升级,不碰 note 内容
-npx an skills add <目录或 git 仓库>  # 拷贝技能到 .agents/skills(npx skills add 通道)
-npx an preset-install  # 把 AN 模式 preset 写进 $DSH_HOME/.agent-presets/an
+npx an init          # scaffold the .agents/notes skeleton + seed note + version pin
+npx an verify        # run every gate; exit 1 with one violation per line on failure
+npx an ci-setup      # detect the CI vendor and write a standalone workflow file (never overwrites)
+npx an migrate       # re-scaffold skeleton files to match the toolkit version; note content untouched
+npx an skills add <directory or git repo>  # copy skills into .agents/skills (the npx skills add channel)
+npx an preset-install  # write the AN preset into $DSH_HOME/.agent-presets/an
 ```
 
-`an verify` 由六个 gate 组成:`tree`(封闭 lifecycle/class 树)、`classification`(遗留路径)、`format`(头块 + 骨架 + alternatives)、`archive`(归档冻结哈希)、`links`(相对链接与锚点)、`wrap`(一段一行)。GitHub 生成 `.github/workflows/agent-notes.yml`;GitLab 生成独立 `.gitlab/agent-notes.yml` 并在输出中给出 include 行。
+`an verify` runs six gates: `tree` (closed lifecycle/class tree), `classification` (legacy paths), `format` (header block + skeleton + alternatives), `archive` (frozen archive seals), `links` (relative links and anchors), and `wrap` (one physical line per paragraph). GitHub gets `.github/workflows/agent-notes.yml`; GitLab gets a standalone `.gitlab/agent-notes.yml` include file with the include line printed.
 
-## dsh 集成
+## dsh integration
 
 ```sh
-dsh plugin --profile web add <仓库地址>   # bundle:AN 命令(/notes-init、/notes-verify、/ci-setup)
-an preset-install                          # AN 模式出现在模式选择器
+dsh plugin --profile web add <repo>   # bundle: AN commands (/notes-init, /notes-verify, /ci-setup)
+an preset-install                      # the AN mode appears in the preset picker
 ```
 
-AN 模式是一个独立的 agent preset,与标准/PTC/创造模式隔离:只有它的会话获得 `notes-verify` 模型工具与 AN 技能(技能经工具的 runtime 注册单一投递,无第二通道)。模型工具/命令/CLI 共享同一引擎(`lib/engine.js`),会话内工具调用与 CI 执行的是同一套 gate 代码;bundle 自包含(vendor 同步 + 漂移守卫),不依赖工具包安装。
+AN mode is an isolated agent preset, separate from standard/ptc/cordis: only its sessions get the `notes-verify` model tool and the AN skills (skills arrive through the tool plugin's runtime registrations — one delivery channel, no second one). The model tool, the commands, and the CLI share one engine (`lib/engine.js`): in-session tool calls and CI execute the same gate code. The bundle is self-contained (vendor sync + drift guard) and does not depend on the toolkit being installed.
 
-## 发布状态
+## Release status
 
-npm publish 已 dry-run 通过(28 文件、27.1 kB);真实发布被本机 npm 未登录阻塞(`ENEEDAUTH`)。登录 `registry.npmjs.org` 后 `npm publish` 即可;GitHub 仓库本身(含 git 依赖安装路径)已可用。
+npm publish passes dry-run (28 files, 27.1 kB); the real publish is blocked by missing npm auth on this machine (`ENEEDAUTH`). After logging in to `registry.npmjs.org`, `npm publish` is all that remains. The GitHub repository itself (including the git-dependency install path) is usable today.
 
-## 契约
+## Contract
 
-详见 [SPEC.md](SPEC.md) 与 [.agents/notes/README.md](.agents/notes/README.md)。所有 gate 与 CLI 共享同一引擎;退出码 0/1 是 CI 的强制语言。
+See [SPEC.md](SPEC.md) and the [Agent Note rules](scaffold/.agents/notes/README.md) (scaffolded into your project by `an init`). Every gate and CLI shares one engine; exit code 0/1 is the CI enforcement language.
 
-## 开发
+## Development
 
 ```sh
 npm install
-npm test        # node:test 全套件
-npm run verify  # 自托管:本仓库跑自己的 gates
+npm test        # node:test full suite
+npm run verify  # self-hosted: this repository runs its own gates
 ```

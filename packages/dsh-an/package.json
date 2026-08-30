@@ -4,20 +4,17 @@
   "description": "AN mode dsh bundle: Agent Notes bundled skills, notes tools/commands, and the `an` agent preset",
   "type": "module",
   "main": "lib/index.js",
-  "types": "lib/types/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./lib/types/index.d.ts",
-      "default": "./lib/index.js"
-    },
+    ".": "./lib/index.js",
+    "./tools": "./lib/tools.js",
+    "./commands": "./lib/commands.js",
     "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
   "files": [
     "lib/",
     "cordis.patch.yml",
-    "skills/",
-    "presets/"
+    "skills/"
   ],
   "license": "MIT",
   "engines": { "node": ">=22" },
@@ -27,6 +24,14 @@
     }
   },
   "dependencies": {
-    "@liangminhua/agent-notes-toolkit": "^0.1.0"
+    "@liangminhua/agent-notes-toolkit": "file:../../",
+    "@deepseek-ai/dsh-tools": "^0.0.1-rc.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-commands": "^0.0.1-rc.1"
   }
 }

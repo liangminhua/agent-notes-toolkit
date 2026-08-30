@@ -1,19 +1,11 @@
-# The AN mode patch layer: bundled skills + notes commands for any dsh host
-# composition, plus the `an` agent preset as a system preset root.
+# The AN mode patch layer: bundled AN skills, host-plane AN commands, and the
+# AN preset tree.
 #
-# This patch is host-plane: it adds the bundled skill root and the user
-# commands to whatever profile installs it. The `an` PRESET (presets/an) is
-# the per-session composition that isolates the AN workflow from standard/ptc.
-- id: an-skills
-  name: '@deepseek-ai/dsh-skill-filesystem'
-  config:
-    providerName: an-bundled
-    includeDefaultRoots: true
-    customSkillDirs:
-      - !!js (require('node:path').join(require('node:path').dirname(require.resolve('@liangminhua/dsh-an/package.json')), 'skills'))
-
-# NOTE: the host-plane notes commands and preset-plane notes tools ship as
-# `@liangminhua/dsh-an-commands` / `@liangminhua/dsh-an-tools` plugin packages;
-# until then agents run `an verify` through the shell tools. The AN preset
-# (installed via `an preset-install`) is the per-session composition.
-
+# `dsh-an-commands` is a host-plane function plugin over the shared
+# `commands` service; the `/notes-*` commands it registers are global to the
+# profile that installs this bundle. The AN PRESET (installed by
+# `an preset-install`) is the per-session composition that isolates the
+# workflow from standard/ptc/cordis presets.
+- insert:
+    - id: an-commands
+      name: '@liangminhua/dsh-an/commands'

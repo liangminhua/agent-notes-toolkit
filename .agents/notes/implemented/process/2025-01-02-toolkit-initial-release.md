@@ -8,7 +8,7 @@ The Agent Notes mechanism lived inside one repository, unreachable by other proj
 
 ## Decision
 
-This repository ships the mechanism as `@liangminhua/agent-notes-toolkit`: six standalone gates (`tree`, `classification`, `format`, `archive`, `links`, `wrap`) sharing one cwd-upward root discovery, an `an` CLI (`init`, `verify`, `ci-setup`, `migrate`, `preset-install`), scaffold templates, three maintenance skills (`archive-notes`, `note-workflow`, `prose-standard`), and a dsh bundle (`@liangminhua/dsh-an`) whose `an` preset is an isolated per-session composition in the dsh mode picker.
+This repository ships the mechanism as `@liangminhua/agent-notes-toolkit`: six standalone gates (`tree`, `classification`, `format`, `archive`, `links`, `wrap`) sharing one cwd-upward root discovery, a shared `lib/engine.js` execution core, an `an` CLI (`init`, `verify`, `ci-setup`, `migrate`, `preset-install`), scaffold templates, three maintenance skills (`archive-notes`, `note-workflow`, `prose-standard`), and a dsh bundle (`@liangminhua/dsh-an`) whose `an` preset is an isolated per-session composition in the dsh mode picker. The dsh plugins are plain-ESM function plugins shipped as package subpaths: `@liangminhua/dsh-an/commands` registers `/notes-init`, `/notes-verify`, `/ci-setup`, and `@liangminhua/dsh-an/tools` registers the model-facing `notes-verify` tool plus bundled skills as runtime registrations. Both are shells around the same engine the CLI and CI execute.
 
 ## Alternatives considered
 
@@ -21,4 +21,4 @@ The toolkit is self-hosted: this repository's own `.agents/notes` tree passes `a
 
 ## Testing
 
-The node:test suite (37 tests) pins every gate's acceptance and rejection paths, the CLI's idempotence and refusal behavior, and the preset generator's output. `an verify` runs green on this repository.
+The node:test suite (43 tests) pins every gate's acceptance and rejection paths, the CLI's idempotence and refusal behavior, the preset generator's output, and both dsh plugins' registration/disposal contracts over npm cordis with fake registries. `an verify` runs green on this repository. Real-composition evidence: the bundle installs into a fresh `dsh` web profile via `dsh plugin --profile web add`, the profile dumps with the `an-commands` row, and a live headless session with a real DeepSeek key called `notes-verify` (mounted through a `--patch` overlay), whose durable `tool/result` event records the gate output.

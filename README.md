@@ -23,11 +23,11 @@ npx an preset-install  # 把 AN 模式 preset 写进 $DSH_HOME/.agent-presets/an
 ## dsh 集成
 
 ```sh
-dsh plugin --profile web add @liangminhua/dsh-an   # bundle:捆绑技能
-an preset-install                                   # AN 模式出现在模式选择器
+dsh plugin --profile web add <仓库地址>   # bundle:捆绑 AN 命令(/notes-init、/notes-verify、/ci-setup)
+an preset-install                          # AN 模式出现在模式选择器
 ```
 
-AN 模式是一个独立的 agent preset,与标准/PTC/创造模式隔离:只有它的会话获得 AN 技能与工具。
+AN 模式是一个独立的 agent preset,与标准/PTC/创造模式隔离:只有它的会话获得 `notes-verify` 模型工具与 AN 技能。模型工具/命令/CLI 共享同一引擎(`lib/engine.js`),会话内工具调用与 CI 执行的是同一套 gate 代码。
 
 ## 契约
 

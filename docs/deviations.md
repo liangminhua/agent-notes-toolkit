@@ -16,6 +16,9 @@ The toolkit ports the Agent Notes mechanism from `deepseek-harness` (sources: `s
 - **Grandfather date.** The pre-format alternatives exemption is dated 2025-01-01 (toolkit birth) instead of upstream's 2026-07-05.
 - **Archive manifest name.** `an-archive-manifest.json` instead of the upstream append-only manifest file; the seal semantics (SHA-256 per file, append-only `--write`) are unchanged.
 - **Gate implementation language.** Plain Node ESM instead of TypeScript; the mdast dependency surface (`mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`) is identical.
+- **CI wiring.** `an ci-setup` writes standalone pipeline files (`.github/workflows/agent-notes.yml` / `.gitlab/agent-notes.yml`) and never edits an existing pipeline file; upstream has no equivalent command (its CI config is committed).
+- **dsh plugins.** The bundle ships plain-ESM function plugins as package subpaths with a hand-built JSON-schema ToolDefinition (no `dsh-tools` schema-DSL dependency) and a self-contained vendored engine (`scripts/sync-vendor.mjs` + drift guard); upstream ships TypeScript service plugins inside the workspace.
+- **Preset tools row.** The generated AN preset names the tools plugin by resolved file path when the dsh-an package resolves from the toolkit installation, otherwise by the `@liangminhua/dsh-an/tools` subpath the harness/profile base resolves.
 
 ## Kept
 

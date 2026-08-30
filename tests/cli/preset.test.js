@@ -17,7 +17,8 @@ test('an preset-install writes the preset into a custom DSH_HOME', async () => {
     assert.ok(existsSync(join(dir, 'metadata.yml')))
     const composition = readFileSync(join(dir, 'agent.cordis.yml'), 'utf8')
     assert.match(composition, /AN mode preset/)
-    assert.match(composition, /customSkillDirs/)
+    assert.match(composition, /an-tools/)
+    assert.match(composition, /dsh-agent-instructions/)
     assert.match(readFileSync(join(dir, 'metadata.yml'), 'utf8'), /AN 模式/)
     assert.deepEqual([...files].sort(), ['agent.cordis.yml', 'metadata.yml'])
   } finally {
@@ -26,11 +27,12 @@ test('an preset-install writes the preset into a custom DSH_HOME', async () => {
   rmSync(home, { recursive: true, force: true })
 })
 
-test('preset composition embeds an absolute bundled-skills path', async () => {
-  const { presetComposition, bundledSkillsDir } = await import(PRESET)
-  const { resolve } = await import('node:path')
-  const composition = presetComposition(bundledSkillsDir())
-  assert.ok(composition.includes(JSON.stringify(resolve(bundledSkillsDir()))), composition)
+test('preset composition mounts only the tools plugin and no duplicate skills row', async () => {
+  const { presetComposition } = await import(PRESET)
+  const composition = presetComposition()
+  assert.match(composition, /dsh-an\/tools|@liangminhua\/dsh-an\/tools/, 'tools row must name the dsh-an tools plugin')
+  assert.ok(!composition.includes('an-skills'), 'skills arrive via the tools plugin runtime registrations — one delivery channel')
+  assert.ok(!composition.includes('dsh-skill-filesystem'), composition)
 })
 
 test('cli preset-install writes into DSH_HOME', () => {

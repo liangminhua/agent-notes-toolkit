@@ -4,12 +4,13 @@
  * named `name`/`inject`/`apply`, no default export) so the AN preset can mount
  * it as a file-path row and any host composition can mount it as a bare
  * package subpath row. The tool is a shell around the shared toolkit engine:
- * same code the `an` CLI and CI execute.
+ * same code the `an` CLI and CI execute. The ToolDefinition is hand-built as a
+ * plain JSON-schema object — no dependency on the dsh-tools schema DSL, so
+ * only the wire-stable registry contract is involved.
  * @module @liangminhua/dsh-an/tools
  */
 
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import { engineVerify } from '../../../lib/engine.js'
+import { engineVerify } from '../vendor/lib/engine.js'
 import { bundledSkills } from './skills.js'
 
 export const name = 'dsh-an-tools'
@@ -22,22 +23,29 @@ function sessionCwd(agent) {
 }
 
 /**
- * Mount the `notes-verify` tool and the bundled AN skills.
- * @param {import('@deepseek-ai/cordis').Context} ctx - context carrying `tools`.
+ * The `notes-verify` ToolDefinition: name/description/parameters as the
+ * model-facing schema, a canonical output schema the registry validates, and
+ * the engine call as the body.
  */
-export function apply(ctx) {
-  const notesVerify = defineTool({
+function buildNotesVerify() {
+  return {
     name: 'notes-verify',
     description: 'Verify this project\'s Agent Notes tree against the AN rules (structure, lifecycle/class folders, file format, frozen archive, cross-links, paragraph wrap). Returns one line per violation; fix them and call again until ok is true.',
     parameters: {
-      root: { type: 'string', description: 'Project root to verify. Omit to use the session workspace.' },    },
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        root: { type: 'string', description: 'Project root to verify. Omit to use the session workspace.' },
+      },
+    },
     output: {
       schema: {
         type: 'object',
         additionalProperties: false,
+        required: ['ok', 'lines'],
         properties: {
-          ok: { type: 'boolean', required: true },
-          lines: { type: 'array', required: true, items: { type: 'string' } },
+          ok: { type: 'boolean' },
+          lines: { type: 'array', items: { type: 'string' } },
         },
       },
       render(_args, value) {
@@ -58,8 +66,15 @@ export function apply(ctx) {
       if (result.isError) return undefined
       return { card: 'generic', title: 'Agent Notes verified' }
     },
-  })
-  const disposer = ctx.tools.register(notesVerify)
+  }
+}
+
+/**
+ * Mount the `notes-verify` tool and the bundled AN skills.
+ * @param {import('@deepseek-ai/cordis').Context} ctx - context carrying `tools`.
+ */
+export function apply(ctx) {
+  const disposer = ctx.tools.register(buildNotesVerify())
 
   // Bundled skills: runtime provider registrations, available only in
   // compositions that mount this plugin (the AN preset). Omission of the

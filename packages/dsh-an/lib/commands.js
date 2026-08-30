@@ -7,7 +7,7 @@
  * @module @liangminhua/dsh-an/commands
  */
 
-import { engineCiSetup, engineInit, engineVerify } from '../../../lib/engine.js'
+import { engineCiSetup, engineInit, engineVerify } from '../vendor/lib/engine.js'
 
 export const name = 'dsh-an-commands'
 export const inject = ['commands']

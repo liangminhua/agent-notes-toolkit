@@ -13,6 +13,7 @@
   },
   "files": [
     "lib/",
+    "vendor/",
     "cordis.patch.yml",
     "skills/"
   ],
@@ -23,10 +24,7 @@
       "patch": "./cordis.patch.yml"
     }
   },
-  "dependencies": {
-    "@liangminhua/agent-notes-toolkit": "file:../../",
-    "@deepseek-ai/dsh-tools": "^0.0.1-rc.1"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1"
   },

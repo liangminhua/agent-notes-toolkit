@@ -70,15 +70,20 @@ test('an ci-setup prints a snippet when no CI is detected', () => {
   rmSync(root, { recursive: true, force: true })
 })
 
-test('an ci-setup prints the include block for gitlab and appends with --confirm', () => {
+test('an ci-setup writes a standalone include file for gitlab', () => {
   const root = makeProject()
   writeFileSync(join(root, '.gitlab-ci.yml'), 'stages:\n  - test\n')
-  const printed = runCli(['ci-setup'], root)
-  assert.equal(printed.code, 0)
-  assert.match(printed.out, /append this block/)
-  const appended = runCli(['ci-setup', '--confirm'], root)
-  assert.equal(appended.code, 0)
-  assert.match(readFileSync(join(root, '.gitlab-ci.yml'), 'utf8'), /include:/)
+  const first = runCli(['ci-setup'], root)
+  assert.equal(first.code, 0, first.out)
+  const include = join(root, '.gitlab', 'agent-notes.yml')
+  assert.ok(existsSync(include))
+  assert.match(readFileSync(include, 'utf8'), /npm exec an verify/)
+  assert.match(first.out, /append `include: '\.gitlab\/agent-notes\.yml'`/)
+  const second = runCli(['ci-setup'], root)
+  assert.equal(second.code, 1)
+  assert.match(second.out, /refusing to overwrite/)
+  const forced = runCli(['ci-setup', '--confirm'], root)
+  assert.equal(forced.code, 0, forced.out)
   rmSync(root, { recursive: true, force: true })
 })
 

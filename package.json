@@ -1,0 +1,30 @@
+{
+  "name": "@liangminhua/agent-notes-toolkit",
+  "version": "0.1.0",
+  "description": "Portable Agent Notes mechanism: verification gates, scaffolding CLI, maintenance skills, and the dsh AN bundle",
+  "type": "module",
+  "bin": { "an": "./lib/cli.js" },
+  "files": [
+    "lib/",
+    "gates/",
+    "scaffold/",
+    "skills/",
+    "docs/",
+    "README.md",
+    "SPEC.md"
+  ],
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.js\"",
+    "test:gates": "node --test tests/gates/",
+    "test:cli": "node --test tests/cli/",
+    "verify": "node lib/cli.js verify",
+    "check": "npm run test && npm run verify"
+  },
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "mdast-util-from-markdown": "^2.0.2",
+    "mdast-util-gfm": "^3.0.0",
+    "micromark-extension-gfm": "^3.0.0"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@liangminhua/dsh-an",
+  "version": "0.1.0",
+  "description": "AN mode dsh bundle: Agent Notes bundled skills, notes tools/commands, and the `an` agent preset",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "cordis.patch.yml",
+    "skills/",
+    "presets/"
+  ],
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@liangminhua/agent-notes-toolkit": "^0.1.0"
+  }
+}

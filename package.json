@@ -4,7 +4,8 @@
   "description": "Portable Agent Notes mechanism: verification gates, scaffolding CLI, maintenance skills, and the dsh AN bundle",
   "type": "module",
   "bin": {
-    "an": "./lib/cli.js"
+    "an": "./lib/cli.js",
+    "skills": "./lib/skills-cli.js"
   },
   "files": [
     "lib/",

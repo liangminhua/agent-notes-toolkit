@@ -6,9 +6,19 @@ The portable Agent Notes mechanism: a decision-record tree, verification gates, 
 
 ## Install
 
+One-off use needs no install — `npx` runs the current version directly:
+
+```sh
+npx --yes @liangminhua/agent-notes-toolkit an verify   # run once, nothing installed
+```
+
+The `--yes` form skips the install prompt; the package downloads into the npx cache and is never added to your project. Install it as a devDependency only when a project pins the toolkit version (CI, `npm run` scripts, repeated local use):
+
 ```sh
 npm install --save-dev @liangminhua/agent-notes-toolkit
 ```
+
+Both forms run the identical engine; CI should use the pinned devDependency form (`npm exec an verify`) so a version bump cannot change what the pipeline runs.
 
 ## Use
 
@@ -17,7 +27,7 @@ npx an init          # scaffold the .agents/notes skeleton + seed note + version
 npx an verify        # run every gate; exit 1 with one violation per line on failure
 npx an ci-setup      # detect the CI vendor and write a standalone workflow file (never overwrites)
 npx an migrate       # re-scaffold skeleton files to match the toolkit version; note content untouched
-npx an skills add <directory or git repo>  # copy skills into .agents/skills (the npx skills add channel)
+npx skills add <directory or git repo>  # copy skills into .agents/skills (the skills-add channel)
 npx an preset-install  # write the AN preset into $DSH_HOME/.agent-presets/an
 ```
 
@@ -34,7 +44,7 @@ AN mode is an isolated agent preset, separate from standard/ptc/cordis: only its
 
 ## Release status
 
-npm publish passes dry-run (28 files, 27.1 kB); the real publish is blocked by missing npm auth on this machine (`ENEEDAUTH`). After logging in to `registry.npmjs.org`, `npm publish` is all that remains. The GitHub repository itself (including the git-dependency install path) is usable today.
+npm publish passes dry-run and `publishConfig.access` is `public`. The real publish needs one 2FA code per package (registry policy): run `npm publish --registry https://registry.npmjs.org` in the repository root, then again in `packages/dsh-an/`, entering the code each time. The GitHub repository itself (including the git-dependency install path) is usable today.
 
 ## Contract
 

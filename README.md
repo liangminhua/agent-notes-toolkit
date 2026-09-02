@@ -27,7 +27,7 @@ npx an init          # scaffold the .agents/notes skeleton + seed note + version
 npx an verify        # run every gate; exit 1 with one violation per line on failure
 npx an ci-setup      # detect the CI vendor and write a standalone workflow file (never overwrites)
 npx an migrate       # re-scaffold skeleton files to match the toolkit version; note content untouched
-npx skills add <directory or git repo>  # copy skills into .agents/skills (the skills-add channel)
+npx skills add <owner/repo or git repo>  # copy skills into .agents/skills (skills.sh syntax)
 npx an preset-install  # write the AN preset into $DSH_HOME/.agent-presets/an
 ```
 
@@ -36,11 +36,11 @@ npx an preset-install  # write the AN preset into $DSH_HOME/.agent-presets/an
 ## dsh integration
 
 ```sh
-dsh plugin --profile web add <repo>   # bundle: AN commands (/notes-init, /notes-verify, /ci-setup)
+dsh plugin --profile web add github:liangminhua/agent-notes-toolkit   # bundle from GitHub, no npm publish
 an preset-install                      # the AN mode appears in the preset picker
 ```
 
-AN mode is an isolated agent preset, separate from standard/ptc/cordis: only its sessions get the `notes-verify` model tool and the AN skills (skills arrive through the tool plugin's runtime registrations — one delivery channel, no second one). The model tool, the commands, and the CLI share one engine (`lib/engine.js`): in-session tool calls and CI execute the same gate code. The bundle is self-contained (vendor sync + drift guard) and does not depend on the toolkit being installed.
+The package declares `dsh.bundle.patch`, so the publish guide's GitHub install form resolves the bundle from the repository root. AN mode is an isolated agent preset, separate from standard/ptc/cordis: only its sessions get the `notes-verify` model tool and the AN skills (skills arrive through the tool plugin's runtime registrations — one delivery channel, no second one). The model tool, the commands, and the CLI share one engine (`lib/engine.js`): in-session tool calls and CI execute the same gate code. The bundle is self-contained (vendor sync + drift guard) and does not depend on the toolkit being installed.
 
 ## Release status
 

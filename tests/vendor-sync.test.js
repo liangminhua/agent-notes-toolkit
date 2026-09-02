@@ -18,7 +18,7 @@ test('vendored dsh-an copies byte-match their toolkit sources', () => {
   const drift = []
   for (const [source, dest] of MANIFEST) {
     const from = readFileSync(join(ROOT, source))
-    const to = readFileSync(join(ROOT, 'packages', 'dsh-an', 'vendor', dest))
+    const to = readFileSync(join(ROOT, 'dsh-an', 'vendor', dest))
     if (!from.equals(to)) drift.push(`${source} -> ${dest}`)
   }
   assert.deepEqual(drift, [], 'run `node scripts/sync-vendor.mjs` after changing a toolkit source')
@@ -26,6 +26,6 @@ test('vendored dsh-an copies byte-match their toolkit sources', () => {
 
 test('vendor version shim tracks the toolkit version', () => {
   const toolkit = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version
-  const shim = JSON.parse(readFileSync(join(ROOT, 'packages', 'dsh-an', 'vendor', 'package.json'), 'utf8'))
+  const shim = JSON.parse(readFileSync(join(ROOT, 'dsh-an', 'vendor', 'package.json'), 'utf8'))
   assert.equal(shim.version, toolkit, 'run `node scripts/sync-vendor.mjs` after a version bump')
 })

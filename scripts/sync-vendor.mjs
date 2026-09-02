@@ -18,7 +18,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const DEST = join(ROOT, 'packages', 'dsh-an', 'vendor')
+const DEST = join(ROOT, 'dsh-an', 'vendor')
 
 /** Toolkit files the bundle vendors, as [source, destination] pairs. */
 export const MANIFEST = [

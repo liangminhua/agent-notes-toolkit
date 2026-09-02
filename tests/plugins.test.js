@@ -16,9 +16,9 @@ import assert from 'node:assert/strict'
 import { Context } from '@deepseek-ai/cordis'
 import { fileURLToPath } from 'node:url'
 
-const TOOLS = fileURLToPath(new URL('../packages/dsh-an/lib/tools.js', import.meta.url))
-const COMMANDS = fileURLToPath(new URL('../packages/dsh-an/lib/commands.js', import.meta.url))
-const SKILLS = fileURLToPath(new URL('../packages/dsh-an/lib/skills.js', import.meta.url))
+const TOOLS = fileURLToPath(new URL('../dsh-an/lib/tools.js', import.meta.url))
+const COMMANDS = fileURLToPath(new URL('../dsh-an/lib/commands.js', import.meta.url))
+const SKILLS = fileURLToPath(new URL('../dsh-an/lib/skills.js', import.meta.url))
 
 /** Minimal in-memory tool registry satisfying the plugin's use of ctx.tools. */
 class FakeTools {

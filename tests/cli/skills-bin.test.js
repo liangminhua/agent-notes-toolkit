@@ -42,3 +42,12 @@ test('skills bin rejects a missing subcommand', () => {
   assert.match(err, /usage: skills add/)
   rmSync(root, { recursive: true, force: true })
 })
+
+test('skills bin accepts the owner/repo shorthand used by npx skills add', () => {
+  const root = makeProject()
+  const { code, out } = runSkillsBin(['add', 'liangminhua/agent-notes-toolkit', '--root', root], root)
+  assert.equal(code, 0, out)
+  assert.match(out, /installed 3 skill\(s\)/)
+  assert.ok(existsSync(join(root, '.agents', 'skills', 'archive-notes', 'SKILL.md')))
+  rmSync(root, { recursive: true, force: true })
+})

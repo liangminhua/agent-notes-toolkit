@@ -48,9 +48,9 @@ test('generated preset rows are shaped for the preset health check', async () =>
     assert.ok(row.name.length > 0, 'row name must not be empty')
     assert.ok(!row.name.includes('\n'), 'row name must be one line')
   }
-  // The tools row names the dsh-an tools plugin: an absolute file when the
+  // The tools row names the toolkit's tools plugin: an absolute file when the
   // package resolves from this installation, or the package subpath otherwise.
-  const tools = rows.find(row => /dsh-an\/tools$/.test(row.name) || row.name.endsWith('lib/tools.js'))
+  const tools = rows.find(row => /agent-notes-toolkit\/tools$/.test(row.name) || row.name.endsWith('lib/tools.js'))
   assert.ok(tools !== undefined, `preset must mount the tools plugin; rows: ${rows.map(r => r.name).join(', ')}`)
 })
 

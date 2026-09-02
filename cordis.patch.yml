@@ -1,11 +1,11 @@
 # The AN mode patch layer: bundled AN skills, host-plane AN commands, and the
 # AN preset tree.
 #
-# `dsh-an-commands` is a host-plane function plugin over the shared
-# `commands` service; the `/notes-*` commands it registers are global to the
-# profile that installs this bundle. The AN PRESET (installed by
-# `an preset-install`) is the per-session composition that isolates the
-# workflow from standard/ptc/cordis presets.
+# The host-plane function plugins live inside this same package as subpath
+# exports (`./commands`, `./tools`); the `/notes-*` commands registered here
+# are global to the profile that installs this bundle. The AN PRESET
+# (installed by `an preset-install`) is the per-session composition that
+# isolates the workflow from standard/ptc/cordis presets.
 - insert:
     - id: an-commands
-      name: '@liangminhua/dsh-an/commands'
+      name: '@liangminhua/agent-notes-toolkit/commands'

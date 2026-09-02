@@ -43,11 +43,10 @@ test('skills bin rejects a missing subcommand', () => {
   rmSync(root, { recursive: true, force: true })
 })
 
-test('skills bin accepts the owner/repo shorthand used by npx skills add', () => {
-  const root = makeProject()
-  const { code, out } = runSkillsBin(['add', 'liangminhua/agent-notes-toolkit', '--root', root], root)
-  assert.equal(code, 0, out)
-  assert.match(out, /installed 3 skill\(s\)/)
-  assert.ok(existsSync(join(root, '.agents', 'skills', 'archive-notes', 'SKILL.md')))
-  rmSync(root, { recursive: true, force: true })
+test('owner/repo shorthand normalizes to a GitHub URL without network', async () => {
+  const { normalizeShorthand } = await import('../../lib/skills-add.js')
+  assert.equal(normalizeShorthand('liangminhua/agent-notes-toolkit'), 'https://github.com/liangminhua/agent-notes-toolkit.git')
+  assert.equal(normalizeShorthand('vercel-labs/agent-skills'), 'https://github.com/vercel-labs/agent-skills.git')
+  // A full URL passes through untouched.
+  assert.equal(normalizeShorthand('https://github.com/a/b.git'), 'https://github.com/a/b.git')
 })

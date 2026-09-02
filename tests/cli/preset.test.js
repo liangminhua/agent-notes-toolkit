@@ -30,7 +30,7 @@ test('an preset-install writes the preset into a custom DSH_HOME', async () => {
 test('preset composition mounts only the tools plugin and no duplicate skills row', async () => {
   const { presetComposition } = await import(PRESET)
   const composition = presetComposition()
-  assert.match(composition, /dsh-an\/tools|@liangminhua\/dsh-an\/tools/, 'tools row must name the dsh-an tools plugin')
+  assert.match(composition, /agent-notes-toolkit\/tools|dsh-an\/lib\/tools\.js/, 'tools row must name the tools plugin')
   assert.ok(!composition.includes('an-skills'), 'skills arrive via the tools plugin runtime registrations — one delivery channel')
   assert.ok(!composition.includes('dsh-skill-filesystem'), composition)
 })

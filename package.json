@@ -1,11 +1,18 @@
 {
   "name": "@liangminhua/agent-notes-toolkit",
   "version": "0.1.0",
-  "description": "Portable Agent Notes mechanism: verification gates, scaffolding CLI, maintenance skills, and the dsh AN bundle",
+  "description": "Portable Agent Notes mechanism: verification gates, scaffolding CLI, maintenance skills, and the AN preset for dsh",
   "type": "module",
   "bin": {
     "an": "./lib/cli.js",
     "skills": "./lib/skills-cli.js"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./commands": "./dsh-an/lib/commands.js",
+    "./tools": "./dsh-an/lib/tools.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
   },
   "files": [
     "lib/",
@@ -13,6 +20,8 @@
     "scaffold/",
     "skills/",
     "docs/",
+    "dsh-an/",
+    "cordis.patch.yml",
     "README.md",
     "README.zh.md",
     "SPEC.md"
@@ -25,13 +34,24 @@
     "check": "npm run test && npm run verify"
   },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
   },
   "dependencies": {
     "mdast-util-from-markdown": "^2.0.2",
     "mdast-util-gfm": "^3.0.0",
     "micromark-extension-gfm": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "^4.0.2"

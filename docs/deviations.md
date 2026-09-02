@@ -17,8 +17,9 @@ The toolkit ports the Agent Notes mechanism from `deepseek-harness` (sources: `s
 - **Archive manifest name.** `an-archive-manifest.json` instead of the upstream append-only manifest file; the seal semantics (SHA-256 per file, append-only `--write`) are unchanged.
 - **Gate implementation language.** Plain Node ESM instead of TypeScript; the mdast dependency surface (`mdast-util-from-markdown`, `mdast-util-gfm`, `micromark-extension-gfm`) is identical.
 - **CI wiring.** `an ci-setup` writes standalone pipeline files (`.github/workflows/agent-notes.yml` / `.gitlab/agent-notes.yml`) and never edits an existing pipeline file; upstream has no equivalent command (its CI config is committed).
-- **dsh plugins.** The bundle ships plain-ESM function plugins as package subpaths with a hand-built JSON-schema ToolDefinition (no `dsh-tools` schema-DSL dependency) and a self-contained vendored engine (`scripts/sync-vendor.mjs` + drift guard); upstream ships TypeScript service plugins inside the workspace.
-- **Preset tools row.** The generated AN preset names the tools plugin by resolved file path when the dsh-an package resolves from the toolkit installation, otherwise by the `@liangminhua/dsh-an/tools` subpath the harness/profile base resolves.
+- **dsh plugins.** The toolkit is ONE npm package carrying both the CLI and the dsh bundle: the root manifest declares `dsh.bundle.patch` and the plugins ship as subpath exports (`./commands`, `./tools`) with a hand-built JSON-schema ToolDefinition (no `dsh-tools` schema-DSL dependency) and a self-contained vendored engine (`scripts/sync-vendor.mjs` + drift guard); upstream ships TypeScript service plugins inside the workspace. The single-package layout is what makes the publish guide's GitHub install form (`dsh plugin add github:owner/repo`) resolve the bundle from the repository root.
+- **Preset tools row.** The generated AN preset names the tools plugin by resolved file path when the toolkit package resolves from the installation, otherwise by the `@liangminhua/agent-notes-toolkit/tools` subpath the harness/profile base resolves.
+- **Skills CLI.** A second bin (`skills`) with the skills.sh `owner/repo` shorthand normalized to a GitHub URL; upstream has no equivalent channel.
 
 ## Kept
 

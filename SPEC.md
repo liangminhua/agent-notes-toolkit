@@ -4,8 +4,7 @@ This repository packages the Agent Notes mechanism from `deepseek-harness` as a 
 
 ## 1. Product
 
-- `@liangminhua/agent-notes-toolkit` — an npm package: verification gates, a CLI (`an`), scaffold templates, and maintenance skills. No runtime dependency on `dsh` or any agent framework.
-- `@liangminhua/dsh-an` — a dsh bundle (profile patch layer) that mounts bundled skills, the notes tools/commands, and the `an` agent preset.
+- `@liangminhua/agent-notes-toolkit` — one npm package: verification gates, two CLIs (`an`, `skills`), scaffold templates, maintenance skills, and the dsh bundle. The dsh plugins ship as subpath exports (`./commands`, `./tools`); the package declares `dsh.bundle.patch` so `dsh plugin --profile <name> add github:owner/repo` installs it directly from GitHub (no npm publish required), and `npx skills add owner/repo` installs its skills the same way.
 
 ## 2. Core invariants
 
@@ -29,13 +28,13 @@ This repository packages the Agent Notes mechanism from `deepseek-harness` as a 
 - `an ci-setup [--root <dir>] [--ci github|gitlab|none]` — detect the CI vendor (default: detect from repo markers) and write a standalone workflow file. GitHub → `.github/workflows/agent-notes.yml`; GitLab → print an `include:` snippet, append only with `--confirm`; neither → print a paste-ready snippet. Never overwrites an existing file.
 - `an migrate [--root <dir>]` — re-scaffold skeleton files from the current package version without touching note content; reports files changed.
 
-## 4. dsh bundle (`@liangminhua/dsh-an`)
+## 4. dsh bundle (same package, subpath exports)
 
-- Declares `dsh.bundle.patch` and ships `cordis.patch.yml`.
-- Bundled skills: archive-notes, prose-standard, trim-leakage, note-workflow. They are model-invocable and user-invocable by default; a dsh host may override.
-- Notes tools: model-facing `notes-verify` (read-only), user commands `/notes-init`, `/notes-verify`, `/ci-setup`.
-- The `an` preset is a full, isolated agent composition (persona, bundled-skills provider, tools) discovered from the package's `presets/an` directory and registered as a system-trust preset root; it must not alter standard/ptc/cordis presets.
-- The bundle keeps skills and tools behind the preset realm for preset-owned sessions; commands and skills remain usable in any host composition that mounts the patch layer.
+- The root package declares `dsh.bundle.patch` and ships `cordis.patch.yml`; `dsh plugin --profile <name> add github:owner/repo` resolves it from the repository root.
+- Subpath exports: `@liangminhua/agent-notes-toolkit/commands` (host-plane `/notes-init`, `/notes-verify`, `/ci-setup`), `@liangminhua/agent-notes-toolkit/tools` (model-facing `notes-verify` + bundled skills as runtime registrations).
+- Bundled skills: archive-notes, prose-standard, note-workflow. They are model-invocable and user-invocable by default; a dsh host may override.
+- The `an` preset is a full, isolated agent composition (persona, tools) written by `an preset-install` into `$DSH_HOME/.agent-presets/an`; it must not alter standard/ptc/cordis presets. The preset's tools row names the installed package's plugin file when resolvable, otherwise the `@liangminhua/agent-notes-toolkit/tools` subpath.
+- The `skills` bin normalizes the skills.sh `owner/repo` shorthand into a GitHub URL before the shallow clone, so `npx skills add owner/repo` and `npx skills add <git-url>` behave identically.
 
 ## 5. Upstream fidelity
 
